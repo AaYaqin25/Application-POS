@@ -1,0 +1,59 @@
+<%- include('../partials/header')%>
+    <div class="container">
+        <strong>
+            <h2>Users</h2>
+        </strong>
+        <div class="card">
+            <div class="card-header">
+                <div class="header">
+                    <h4 style="color:blue ;">Form edit</h4>
+                </div>
+            </div>
+            <div class="card-body">
+
+                <form action="" method="post">
+
+                    <div class="row mb-3">
+                        <label for="email" class="col-sm-2 col-form-label">Email</label>
+                        <div class="col-sm-10">
+                            <input type="email" class="form-control" id="email" name="email" required value="<%= data.email%>">
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <label for="name" class="col-sm-2 col-form-label">Name</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="name" name="name" required value="<%= data.name%>">
+                        </div>
+                    </div>
+
+                    <fieldset class="form-group">
+                        <div class="row">
+                            <legend class="col-form-label col-sm-2 pt-0">Role</legend>
+                            <div class="col-sm-10">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="role" id="operator"
+                                        value="Operator" <%= data.role == "Operator" ? 'checked': ''%>
+                                    <label class="form-check-label" for="operator">
+                                        Operator
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="role" id="admin" value="Admin" <%= data.role == "Admin" ? 'checked': ''%>>
+                                    <label class="form-check-label" for="admin">
+                                        Admin
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-success"> <i class="fas fa-solid fa-database"></i> Save</button>
+                        <a href="/users/user" class="btn btn-warning"> <i class=" fa fa-solid fa-undo"></i> Back </a>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+    <%- include('../partials/footer')%>
