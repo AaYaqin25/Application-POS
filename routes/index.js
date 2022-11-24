@@ -24,7 +24,6 @@ module.exports = function (db) {
       const checkPassword = bcrypt.compareSync(password, findReg.rows[0].password);
       if (!checkPassword) {
         req.flash('failureMessage', 'Wrong Password')
-        console.log("test");
         return res.redirect('/')
       }
 

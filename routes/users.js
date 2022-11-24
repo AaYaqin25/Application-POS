@@ -45,7 +45,7 @@ module.exports = function (db) {
   });
 
 
-  router.post('/add', async function (req, res, next) {
+  router.post('/add', isLoggedIn,async function (req, res, next) {
     try {
       const { email, name, password, role } = req.body
       const hash = bcrypt.hashSync(password, saltRounds);
@@ -68,7 +68,7 @@ module.exports = function (db) {
     }
   });
 
-  router.post('/edit/:userid', async function (req, res, next) {
+  router.post('/edit/:userid', isLoggedIn,async function (req, res, next) {
     try {
       const id = req.params.userid
       const { email, name, role } = req.body
@@ -84,7 +84,7 @@ module.exports = function (db) {
   router.get('/delete/:userid', isLoggedIn, async function (req, res, next) {
     try {
       const id = req.params.userid
-      const getEdit = await db.query("DELETE FROM users WHERE userid = $1", [id])
+      await db.query("DELETE FROM users WHERE userid = $1", [id])
       res.redirect('/users/user')
     } catch (error) {
       console.log(error);
