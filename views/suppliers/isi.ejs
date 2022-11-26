@@ -3,16 +3,16 @@
 
     <div class="container">
         <strong>
-            <h2>Users</h2>
+            <h2>Suppliers</h2>
         </strong>
-        <h5>This is data of Users</h5>
+        <h5>This is data of Suppliers</h5>
         <br>
        
         <div class="card">
 
             <div class="card-header">
                 <div class="header">
-                    <a href="/users/add" class="btn btn-primary"> <i class=" fas fa-solid fa-plus"> Add</i></a>
+                    <a href="/suppliers/add" class="btn btn-primary"> <i class=" fas fa-solid fa-plus"> Add</i></a>
                 </div>
             </div>
 
@@ -20,19 +20,19 @@
                 <table id="table-user" class="table table-bordered" style="width:100%">
                     <thead>
                         <tr>
-                            <th>User ID</th>
-                            <th>Email</th>
+                            <th>Supplier ID</th>
                             <th>Name</th>
-                            <th>Role</th>
+                            <th>Address</th>
+                            <th>Phone</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tfoot>
                         <tr>
-                            <th>User ID</th>
-                            <th>Email</th>
+                            <th>Supplier ID</th>
                             <th>Name</th>
-                            <th>Role</th>
+                            <th>Address</th>
+                            <th>Phone</th>
                             <th>Action</th>
                         </tr>
                     </tfoot>
@@ -47,17 +47,17 @@
                 "lengthMenu": [[3, 10, 100], [3, 10, 100]],
                 "processing": true,
                 "serverSide": true,
-                "ajax": "/users/datatable",
+                "ajax": "/suppliers/datatable",
                 "columns": [
-                    { "data": "userid" },
-                    { "data": "email" },
+                    { "data": "supplierid" },
                     { "data": "name" },
-                    { "data": "role" },
+                    { "data": "address" },
+                    { "data": "phone" },
                     {
-                        "data": "userid",
+                        "data": "supplierid",
                         render: function (data, type) {
                             return `
-                            <a href="/users/edit/${data}" class="btn btn-circle btn-success"> <i class="fas fa-info-circle "></i></a>
+                            <a href="/suppliers/edit/${data}" class="btn btn-circle btn-success"> <i class="fas fa-info-circle "></i></a>
                             <a href="#" class="btn btn-circle btn-danger" data-toggle="modal" data-target="#deleteModal"> <i class=" fas fa-solid fa-trash"></i></a>
 
                             <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog"
@@ -73,7 +73,7 @@
                                                         <div class="modal-body">Are you sure, you want delete it</div>
                                                         <div class="modal-footer">
                                                             <button class="btn btn-secondary" type="button" data-dismiss="modal">No</button>
-                                                            <a class="btn btn-primary" href="/users/delete/${data}">Yes</a>
+                                                            <a class="btn btn-primary" href="/suppliers/delete/${data}">Yes</a>
                                                         </div>
                                                     </div>
                                                 </div>

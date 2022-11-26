@@ -94,7 +94,7 @@ module.exports = function (db) {
                 data: getEdit.rows[0],
                 value: editUnit.rows,
                 user: req.session.user,
-                currentPage: "POS - Units"
+                currentPage: "POS - Goods"
             })
         } catch (error) {
             console.log(error);
