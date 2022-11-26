@@ -5,12 +5,12 @@ const saltRounds = 10;
 const { isLoggedIn } = require('../helpers/middle.js')
 
 module.exports = function (db) {
-  router.get('/dashboard', isLoggedIn, function (req, res, next) {
-    res.render('dashboard/isi', { user: req.session.user })
-  });
 
   router.get('/user', isLoggedIn, function (req, res, next) {
-    res.render('users/isi', { user: req.session.user })
+    res.render('users/isi', { 
+      user: req.session.user,
+      currentPage: "POS - Users"
+    })
   });
 
   router.get('/datatable', isLoggedIn, async (req, res) => {
@@ -41,7 +41,10 @@ module.exports = function (db) {
   })
 
   router.get('/add', isLoggedIn, function (req, res, next) {
-    res.render('users/add', { user: req.session.user })
+    res.render('users/add', { 
+      user: req.session.user,
+      currentPage: "POS - Users"
+     })
   });
 
 
@@ -61,7 +64,11 @@ module.exports = function (db) {
     try {
       const id = req.params.userid
       const getEdit = await db.query("SELECT * FROM users WHERE userid = $1", [id])
-      res.render('users/edit', { data: getEdit.rows[0], user: req.session.user })
+      res.render('users/edit', { 
+        data: getEdit.rows[0], 
+        user: req.session.user,
+        currentPage: "POS - Users"
+       })
     } catch (error) {
       console.log(error);
       res.send(error)

@@ -1,38 +1,45 @@
 <%- include('../partials/header')%>
-    <title><%= currentPage %></title>
-
+    <title>
+        <%= currentPage %>
+    </title>
     <div class="container">
         <strong>
-            <h2>Users</h2>
+            <h2>Goods</h2>
         </strong>
-        <h5>This is data of Users</h5>
+        <h5>This is data of Goods</h5>
         <br>
-       
+
         <div class="card">
 
             <div class="card-header">
                 <div class="header">
-                    <a href="/users/add" class="btn btn-primary"> <i class=" fas fa-solid fa-plus"> Add</i></a>
+                    <a href="/goods/add" class="btn btn-primary"> <i class=" fas fa-solid fa-plus"> Add</i></a>
                 </div>
             </div>
 
             <div class="card-body">
-                <table id="table-user" class="table table-bordered" style="width:100%">
+                <table id="table-goods" class="table table-bordered" style="width:100%">
                     <thead>
                         <tr>
-                            <th>User ID</th>
-                            <th>Email</th>
+                            <th>Barcode</th>
                             <th>Name</th>
-                            <th>role</th>
+                            <th>Stock</th>
+                            <th>Unit</th>
+                            <th>Purchase Price</th>
+                            <th>Selling Price</th>
+                            <th>Picture</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tfoot>
                         <tr>
-                            <th>User ID</th>
-                            <th>Email</th>
+                            <th>Barcode</th>
                             <th>Name</th>
-                            <th>role</th>
+                            <th>Stock</th>
+                            <th>Unit</th>
+                            <th>Purchase Price</th>
+                            <th>Selling Price</th>
+                            <th>Picture</th>
                             <th>Action</th>
                         </tr>
                     </tfoot>
@@ -40,24 +47,46 @@
             </div>
         </div>
     </div>
-
+    <img id="imagepreview" src="" alt="">
     <script>
         $(document).ready(function () {
-            $('#table-user').DataTable({
+            $('#table-goods').DataTable({
                 "lengthMenu": [[3, 10, 100], [3, 10, 100]],
                 "processing": true,
                 "serverSide": true,
-                "ajax": "/users/datatable",
+                "ajax": "/goods/datatable",
                 "columns": [
-                    { "data": "userid" },
-                    { "data": "email" },
+                    { "data": "barcode" },
                     { "data": "name" },
-                    { "data": "role" },
+                    { "data": "stock" },
+                    { "data": "unit" },
                     {
-                        "data": "userid",
-                        render: function (data, type) {
+                        "data": "purchaseprice",
+                        render: function (data) {
                             return `
-                            <a href="/users/edit/${data}" class="btn btn-circle btn-success"> <i class="fas fa-info-circle "></i></a>
+                            ${money.currencyFormatter.format(data)}`
+                        }
+                    },
+                    {
+                        "data": "sellingprice",
+                        render: function (data) {
+                            return `
+                            ${money.currencyFormatter.format(data)}`
+                        }
+                    },
+                    {
+                        "data": "picture",
+                        render: function (data) {
+                            return `
+                            <img src="/images/${data}" alt="no picture" width="100">`
+                            
+                        }
+                    },
+                    {
+                        "data": "barcode",
+                        render: function (data) {
+                            return `
+                            <a href="/goods/edit/${data}" class="btn btn-circle btn-success"> <i class="fas fa-info-circle "></i></a>
                             <a href="#" class="btn btn-circle btn-danger" data-toggle="modal" data-target="#deleteModal"> <i class=" fas fa-solid fa-trash"></i></a>
 
                             <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog"
@@ -73,13 +102,12 @@
                                                         <div class="modal-body">Are you sure, you want delete it</div>
                                                         <div class="modal-footer">
                                                             <button class="btn btn-secondary" type="button" data-dismiss="modal">No</button>
-                                                            <a class="btn btn-primary" href="/users/delete/${data}">Yes</a>
+                                                            <a class="btn btn-primary" href="/goods/delete/${data}">Yes</a>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                            
-                                            `
+                                        `
                         }
                     }
 

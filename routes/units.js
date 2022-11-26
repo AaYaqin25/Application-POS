@@ -1,12 +1,13 @@
 var express = require('express');
 var router = express.Router();
-const bcrypt = require('bcrypt');
-const saltRounds = 10;
 const { isLoggedIn } = require('../helpers/middle.js')
 
 module.exports = function (db) {
     router.get('/', isLoggedIn, function (req, res, next) {
-        res.render('units/isi', { user: req.session.user })
+        res.render('units/isi', { 
+          user: req.session.user,
+          currentPage: "POS - Units"
+        })
     });
 
     router.get('/datatable', isLoggedIn, async (req, res) => {
@@ -42,7 +43,10 @@ module.exports = function (db) {
 
 
     router.get('/add', isLoggedIn, function (req, res, next) {
-        res.render('units/add', { user: req.session.user })
+        res.render('units/add', { 
+          user: req.session.user,
+          currentPage: "POS - Units"
+        })
       });
 
 
@@ -61,7 +65,11 @@ module.exports = function (db) {
         try {
           const id = req.params.unit
           const getEdit = await db.query("SELECT * FROM units WHERE unit = $1", [id])
-          res.render('units/edit', { data: getEdit.rows[0], user: req.session.user })
+          res.render('units/edit', { 
+            data: getEdit.rows[0], 
+            user: req.session.user,
+            currentPage: "POS - Units"
+           })
         } catch (error) {
           console.log(error);
           res.send(error)
