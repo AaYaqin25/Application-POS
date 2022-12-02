@@ -1,38 +1,39 @@
 <%- include('../partials/header')%>
-    <title><%= currentPage %></title>
-
+    <title>
+        <%= currentPage %>
+    </title>
     <div class="container">
         <strong>
-            <h2>Suppliers</h2>
+            <h2>Purchases</h2>
         </strong>
-        <h5>This is data of Suppliers</h5>
+        <h5>This is data of Purchases</h5>
         <br>
-       
+
         <div class="card">
 
             <div class="card-header">
                 <div class="header">
-                    <a href="/suppliers/add" class="btn btn-primary"> <i class=" fas fa-solid fa-plus"> Add</i></a>
+                    <a href="/purchases/create" class="btn btn-primary"> <i class=" fas fa-solid fa-plus"> Add</i></a>
                 </div>
             </div>
 
             <div class="card-body">
-                <table id="table-user" class="table table-bordered" style="width:100%">
+                <table id="table-purchases" class="table table-bordered" style="width:100%">
                     <thead>
                         <tr>
-                            <th>Supplier ID</th>
-                            <th>Name</th>
-                            <th>Address</th>
-                            <th>Phone</th>
+                            <th>Invoice</th>
+                            <th>Time</th>
+                            <th>Total Summary</th>
+                            <th>Supplier</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tfoot>
                         <tr>
-                            <th>Supplier ID</th>
-                            <th>Name</th>
-                            <th>Address</th>
-                            <th>Phone</th>
+                            <th>Invoice</th>
+                            <th>Time</th>
+                            <th>Total Summary</th>
+                            <th>Supplier</th>
                             <th>Action</th>
                         </tr>
                     </tfoot>
@@ -40,24 +41,35 @@
             </div>
         </div>
     </div>
-
     <script>
         $(document).ready(function () {
-            $('#table-user').DataTable({
+            $('#table-purchases').DataTable({
                 "lengthMenu": [[3, 10, 100], [3, 10, 100]],
                 "processing": true,
                 "serverSide": true,
-                "ajax": "/suppliers/datatable",
+                "ajax": "/purchases/datatable",
                 "columns": [
-                    { "data": "supplierid" },
-                    { "data": "name" },
-                    { "data": "address" },
-                    { "data": "phone" },
+                    { "data": "invoice" },
                     {
-                        "data": "supplierid",
-                        render: function (data, type) {
+                        "data": "time",
+                        render: function (data) {
                             return `
-                            <a href="/suppliers/edit/${data}" class="btn btn-circle btn-success"> <i class="fas fa-info-circle "></i></a>
+                            ${moment(data).format('DD MMM YYYY HH:mm:ss')}`
+                        }
+                    },
+                    {
+                        "data": "totalsum",
+                        render: function (data) {
+                            return `
+                            ${money.currencyFormatter.format(data)}`
+                        }
+                    },
+                    { "data": "name" },
+                    {
+                        "data": "invoice",
+                        render: function (data) {
+                            return `
+                            <a href="/purchases/show/${data}" class="btn btn-circle btn-success"> <i class="fas fa-info-circle "></i></a>
                             <a href="#" class="btn btn-circle btn-danger" data-toggle="modal" data-target="#deleteModal${data}"> <i class=" fas fa-solid fa-trash"></i></a>
 
                             <div class="modal fade" id="deleteModal${data}" tabindex="-1" role="dialog"
@@ -73,13 +85,12 @@
                                                         <div class="modal-body">Are you sure, you want delete it</div>
                                                         <div class="modal-footer">
                                                             <button class="btn btn-secondary" type="button" data-dismiss="modal">No</button>
-                                                            <a class="btn btn-primary" href="/suppliers/delete/${data}">Yes</a>
+                                                            <a class="btn btn-primary" href="/purchases/delete/${data}">Yes</a>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                            
-                                            `
+                                        `
                         }
                     }
 

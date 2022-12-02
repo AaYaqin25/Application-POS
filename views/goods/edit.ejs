@@ -55,9 +55,8 @@
                         <label for="unit" class="col-sm-2 col-form-label">Unit</label>
                         <div class="col-sm-10">
                             <select class="form-control" id="unit" name="unit">
-                                <option value="" selected hidden disabled><%= data.unit %></option>
                                 <% value.forEach(item=> {%>
-                                    <option value="<%= item.unit %>">
+                                    <option value="<%= item.unit%>" <%= item.unit == data.unit ? 'selected' : '' %>> 
                                         <%= item.name %> 
                                     </option>
                                     <% }) %>

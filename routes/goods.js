@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var path = require('path')
+var fs = require('fs')
 const { currencyFormatter } = require('../public/javascripts/util.js')
 const { isLoggedIn } = require('../helpers/middle.js');
 
@@ -134,6 +135,12 @@ module.exports = function (db) {
     router.get('/delete/:barcode', isLoggedIn, async function (req, res, next) {
         try {
           const id = req.params.barcode
+
+          const getPict = await db.query("SELECT * FROM goods")
+          const getDelPict = getPict.rows[0].picture
+          const deletePict = path.join(__dirname, '..', 'public', 'images', getDelPict)
+
+          fs.unlinkSync(deletePict)
           await db.query("DELETE FROM goods WHERE barcode = $1", [id])
           res.redirect('/goods')
         } catch (error) {
