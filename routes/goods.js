@@ -2,7 +2,6 @@ var express = require('express');
 var router = express.Router();
 var path = require('path')
 var fs = require('fs')
-const { currencyFormatter } = require('../public/javascripts/util.js')
 const { isLoggedIn } = require('../helpers/middle.js');
 
 module.exports = function (db) {
@@ -39,8 +38,7 @@ module.exports = function (db) {
             "draw": Number(req.query.draw),
             "recordsTotal": total.rows[0].total,
             "recordsFiltered": total.rows[0].total,
-            "data": data.rows,
-            currencyFormatter
+            "data": data.rows
         }
         res.json(response)
     })
