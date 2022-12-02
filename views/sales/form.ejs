@@ -1,0 +1,251 @@
+<%- include('../partials/header')%>
+    <title>
+        <%= currentPage %>
+    </title>
+    <div class="container">
+        <strong>
+            <h2>Sales</h2>
+        </strong>
+        <div class="card">
+            <div class="card-header">
+                <div class="header">
+                    <h3>Transaction</h3>
+                </div>
+            </div>
+            <div class="card-body">
+
+                <form class="row g-3">
+
+                    <div class="col-md-4">
+                        <label for="invoice" class="form-label">Invoice</label>
+                        <input type="text" class="form-control" id="invoice" name="invoice" value="<%= data.invoice%>"
+                            readonly>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="time" class="form-label">Time</label>
+                        <input type="datetime" class="form-control" id="time" name="time"
+                            value="<%= moment(data.time).format('DD MMM YYYY HH:mm:ss')%>" readonly>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label for="operator" class="form-label">Operator</label>
+                        <input type="text" class="form-control" id="operator" name="operator"
+                            value="<%= user.nickname%>" readonly>
+                    </div>
+                </form>
+
+                <br>
+                <hr>
+                <br>
+
+                <form id="form-saleitems" class="row g-3">
+
+                    <div class="col-md-4">
+                        <label for="barcode" class="form-label">Goods Barcode</label>
+                        <select class="form-control" id="barcode" name="barcode">
+                            <% value.forEach( item=> { %>
+                                <option value="<%= item.barcode %>">
+                                    <%= item.barcode + ' - ' + item.name%>
+                                </option>
+                                <% })%>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="goodsname" class="form-label">Goods Name</label>
+                        <input type="text" class="form-control" id="goodsname" name="goodsname" readonly>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label for="stock" class="form-label">Stock</label>
+                        <input type="text" class="form-control" id="stock" name="stock" readonly>
+                    </div>
+
+                    <br>
+
+                    <div class="col-md-4">
+                        <label for="sellingprice" class="form-label">Selling Price</label>
+                        <input type="text" class="form-control" id="sellingprice" name="sellingprice">
+                    </div>
+
+                    <div class="col-md-4">
+                        <label for="qty" class="form-label">Qty</label>
+                        <input type="text" class="form-control" id="qty" name="qty">
+                    </div>
+                    <div class="col-md-4">
+                        <label for="totalprice" class="form-label">Total Price</label>
+                        <input type="text" class="form-control" id="totalprice" name="totalprice">
+                    </div>
+                    <div class="container">
+                        <br>
+                        <button type="submit" class="btn btn-primary"> <i class="fas fa-solid fa-plus"></i>
+                            Add</button>
+                    </div>
+                </form>
+            </div>
+
+            <br>
+            <hr>
+            <hr>
+
+            <form action="" method="post">
+                <table class="table table-striped" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Barcode</th>
+                            <th>Name</th>
+                            <th>Qty</th>
+                            <th>Price</th>
+                            <th>Total Price</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-body">
+    
+                    </tbody>
+                </table>
+                <div class="container">
+
+                
+                <div class="row mb-3">
+                    <label for="totalsummary" class="col-sm-2 col-form-label">Total Summary</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="totalsummary" name="totalsummary" value="<%= data.totalsum%>"
+                            readonly>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label for="pay" class="col-sm-2 col-form-label">Pay</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="pay" name="pay" value="<%= data.pay%>">
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label for="change" class="col-sm-2 col-form-label">Change</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="change" name="change" value="<%= data.change%>" readonly>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label for="customername" class="col-sm-2 col-form-label">Supplier</label>
+                    <div class="col-sm-10">
+                        <select class="form-control" id="customername" name="customername">
+                            <option value="" selected disabled hidden> <%= data.name ? data.name : 'Select Customer'%> </option>
+                            <% result.forEach(item=> {%>
+                                <option value="<%= item.customerid %>">
+                                    <%= item.customerid + ' - ' + item.name %>
+                                </option>
+                                <% }) %>
+                        </select>
+                    </div>
+                </div>
+            </div>
+    
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-success"> <i class="fas fa-solid fa-database"></i>
+                        Save</button>
+                    <a href="/sales" class="btn btn-warning"> <i class=" fa fa-solid fa-undo"></i> Back </a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let invoice = '<%= data.invoice%>'
+
+        $(document).ready(function () {
+            readData()
+
+            $('#barcode').change(function () {
+                const barcode = $(this).val()
+                $.get(`/sales/goods/${barcode}`).done(function (data) {
+                    $('#goodsname').val(data.name)
+                    $('#stock').val(data.stock)
+                    $('#sellingprice').val(data.sellingprice)
+                    $('#qty').val(0)
+                    $('#totalprice').val(0)
+                })
+            })
+
+            $('#qty').keyup(function () {
+                const qty = $(this).val()
+                const sellingprice = $('#sellingprice').val()
+                $('#totalprice').val(money.currencyFormatter.format(sellingprice * qty))
+            })
+
+
+            $('#pay').keyup(function () {
+                const pay = $(this).val()
+                const totalsummary = $('#totalsummary').val()
+                $('#change').val(pay - totalsummary)
+            })
+
+            $('#form-saleitems').submit(function (event) {
+                event.preventDefault()
+                const itemcode = $('#barcode').val()
+                const quantity = $('#qty').val()
+                $.post('/sales/additem', { invoice, itemcode, quantity }).done(function (data) {
+                    readData()
+                    $('#totalsummary').val(data.totalsum)
+        
+                })
+            })
+        })
+
+
+        const readData = () => {
+            $.get(`/sales/details/${invoice}`).done(function (data) {
+                let html = ''
+                data.forEach((item, index) => {
+                    html += `
+                        <tr>
+                            <td>
+                                ${index + 1}   
+                            </td>
+                            <td>
+                                ${item.itemcode}   
+                            </td>
+                            <td>
+                                ${item.name}   
+                            </td>
+                            <td>
+                                ${item.quantity}   
+                            </td>
+                            <td>
+                                ${money.currencyFormatter.format(item.sellingprice)}   
+                            </td>
+                            <td>
+                                ${money.currencyFormatter.format(item.totalprice)}   
+                            </td>
+                            <td>
+                                <a href="#" class="btn btn-circle btn-danger" data-toggle="modal" data-target="#deleteModal${item.id}"> <i class=" fas fa-solid fa-trash"></i></a>
+
+                                <div class="modal fade" id="deleteModal${item.id}" tabindex="-1" role="dialog"
+                                                    aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="exampleModalLabel">Deleted Confirmation</h5>
+                                                                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                                                    <span aria-hidden="true">×</span>
+                                                                </button>
+                                                            </div>
+                                                            <div class="modal-body">Are you sure, you want delete it</div>
+                                                            <div class="modal-footer">
+                                                                <button class="btn btn-secondary" type="button" data-dismiss="modal">No</button>
+                                                                <a class="btn btn-primary" href="/sales/deleteitems/${item.id}">Yes</a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                            </td>
+                        </tr>`
+                });
+                $('#table-body').html(html)
+            })
+        }
+    </script>
+    <%- include('../partials/footer')%>
