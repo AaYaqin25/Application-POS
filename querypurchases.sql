@@ -85,3 +85,18 @@ $set_total_price$ LANGUAGE plpgsql;
 CREATE TRIGGER set_total_price
 BEFORE INSERT OR UPDATE ON purchaseitems
     FOR EACH ROW EXECUTE FUNCTION update_price();
+
+
+
+CREATE OR REPLACE FUNCTION invoice() RETURNS text AS $$
+ 
+    BEGIN
+	IF EXISTS(SELECT invoice FROM purchases WHERE invoice = 'INV-' || to_char(CURRENT_DATE, 'YYYYMMDD') || - 1) THEN
+		return 'INV-' || to_char(CURRENT_DATE, 'YYYYMMDD') || - nextval('invoice_seq');
+	ELSE
+		ALTER SEQUENCE invoice_seq RESTART WITH 1;
+		return 'INV-' || to_char(CURRENT_DATE, 'YYYYMMDD') || - nextval('invoice_seq');
+	END IF;
+END;
+
+$$ LANGUAGE plpgsql;

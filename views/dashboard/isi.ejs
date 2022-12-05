@@ -1,8 +1,195 @@
 <%- include('../partials/header')%>
-<title><%= currentPage %></title>
-<div class="container">
-<strong><h2>Dashboard</h2></strong>
-</div>
-                
+    <title>
+        <%= currentPage %>
+    </title>
+    <div class="container-fluid">
+        <strong>
+            <h2>Dashboard</h2>
+        </strong>
+        <div class="card">
+            <div class="card-header">
+                <div class="header">
+                    <h4 style="color:blue ;">Date Settings</h4>
+                </div>
+            </div>
+            <div class="card-body">
 
-<%- include('../partials/footer')%>
+                <form class="row g-3">
+
+                    <div class="col-md-6">
+                        <label for="startdate" class="form-label">Start Date</label>
+                        <input type="date" class="form-control" id="startdate" name="startdate">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="enddate" class="form-label">End Date</label>
+                        <input type="date" class="form-control" id="enddate" name="enddate">
+                    </div>
+            </div>
+            <div class="card-footer">
+                <button type="submit" class="btn btn-success"> <i class="fas fa-solid fa-check"></i>
+                    Query</button>
+                <a href="/dashboard" class="btn btn-warning"> <i class=" fa fa-solid fa-undo"></i> Reset </a>
+            </div>
+            </form>
+        </div>
+        <br>
+
+        <div class="row">
+
+            <!-- Earnings (Monthly) Card Example -->
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-primary shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                    Purchases</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                    <%=money.currencyFormatter.format(purchases.totalpurchases)%>
+                                </div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Earnings (Annual) Card Example -->
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-success shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                    Sales</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                    <%= money.currencyFormatter.format(sales.totalsales)%>
+                                </div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-success shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                    Earnings</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                    <%= money.currencyFormatter.format(sales.totalsales - purchases.totalpurchases)%>
+                                </div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pending Requests Card Example -->
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-warning shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                    Total Sales</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                    <%= totalSales.total%>
+                                </div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-comments fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+
+            <div class="row-xl-8 col-lg-6">
+
+                <!-- Area Chart -->
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Area Chart</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-area">
+                            <canvas id="myAreaChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Donut Chart -->
+            <div class="row-xl-8 col-lg-6">
+                <div class="card shadow mb-4">
+                    <!-- Card Header - Dropdown -->
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Donut Chart</h6>
+                    </div>
+                    <!-- Card Body -->
+                    <div class="card-body">
+                        <div class="chart-pie pt-4">
+                            <canvas id="myPieChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        
+        $(document).ready( () => {
+            read()
+        })
+        const read = () => {
+            $.get('/dashboard/pie').done(function (data) {
+                var chartDoughnat = $('#myPieChart');
+                var myPieChart = new Chart(chartDoughnat, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ["Direct", "Customer"],
+                        datasets: [{
+                            data: [data.direct, data.member],
+                            backgroundColor: ['#4e73df', '#1cc88a'],
+                            hoverBackgroundColor: ['#2e59d9', '#17a673', '#2c9faf'],
+                            hoverBorderColor: "rgba(234, 236, 244, 1)",
+                        }],
+                    },
+                    options: {
+                        maintainAspectRatio: false,
+                        tooltips: {
+                            backgroundColor: "rgb(255,255,255)",
+                            bodyFontColor: "#858796",
+                            borderColor: '#dddfeb',
+                            borderWidth: 1,
+                            xPadding: 15,
+                            yPadding: 15,
+                            displayColors: false,
+                            caretPadding: 10,
+                        },
+                        legend: {
+                            display: top
+                        },
+                        cutoutPercentage: 80,
+                    },
+                });
+            })
+        }
+    </script>
+
+    <%- include('../partials/footer')%>
