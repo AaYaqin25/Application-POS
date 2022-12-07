@@ -35,7 +35,7 @@ module.exports = function (db) {
   });
 
   router.get('/home', isLoggedIn, function (req, res, next) {
-    res.render('index', {user: req.session.user});
+    res.redirect('/dashboard')
   });
 
   router.get('/register', function (req, res, next) {
