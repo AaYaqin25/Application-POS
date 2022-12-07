@@ -9,12 +9,13 @@
         <div class="card">
             <div class="card-header">
                 <div class="header">
-                    <h4 style="color:blue ;">Date Settings</h4>
+                    <div class="text-xl font-weight-bold text-primary text-pascalcase case mb-1">
+                        Date Settings</div>
                 </div>
             </div>
             <div class="card-body">
 
-                <form class="row g-3">
+                <form id="form-search-date" class="row g-3">
 
                     <div class="col-md-6">
                         <label for="startdate" class="form-label">Start Date</label>
@@ -77,11 +78,11 @@
             </div>
 
             <div class="col-xl-3 col-md-6 mb-4">
-                <div class="card border-left-success shadow h-100 py-2">
+                <div class="card border-left-info shadow h-100 py-2">
                     <div class="card-body">
                         <div class="row no-gutters align-items-center">
                             <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                <div class="text-xs font-weight-bold text-primarborder-left-info text-uppercase mb-1">
                                     Earnings</div>
                                 <div class="h5 mb-0 font-weight-bold text-gray-800">
                                     <%= money.currencyFormatter.format(sales.totalsales - purchases.totalpurchases)%>
@@ -118,53 +119,122 @@
 
         <div class="row">
 
-            <div class="row-xl-8 col-lg-6">
+            <div class="row-xl-8 col-lg-8">
 
                 <!-- Area Chart -->
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">Area Chart</h6>
+                        <h6 class="m-0 font-weight-bold text-primary">Earnings Overview</h6>
                     </div>
                     <div class="card-body">
                         <div class="chart-area">
-                            <canvas id="myAreaChart"></canvas>
+                            <canvas id="myLineChart"></canvas>
                         </div>
                     </div>
                 </div>
             </div>
             <!-- Donut Chart -->
-            <div class="row-xl-8 col-lg-6">
+            <div class="row-xl-8 col-lg-4">
                 <div class="card shadow mb-4">
                     <!-- Card Header - Dropdown -->
                     <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">Donut Chart</h6>
+                        <h6 class="m-0 font-weight-bold text-primary">Revenue Sources</h6>
                     </div>
                     <!-- Card Body -->
                     <div class="card-body">
                         <div class="chart-pie pt-4">
-                            <canvas id="myPieChart"></canvas>
+                            <canvas id="myDoughnatChart"></canvas>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
+        <div class="card">
+            <div class="card-header">
+                <div class="header">
+                    <div class="text-xl font-weight-bold text-primary text-pascalcase case mb-1">
+                        Earnings Monthly Report</div>
+                </div>
+            </div>
+
+            <div class="card-body">
+                <table id="table-dashboard" class="table table-bordered" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>Monthly</th>
+                            <th>Expense</th>
+                            <th>Revenue</th>
+                            <th>Earning</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% allData.forEach(item=> {%>
+                            <tr>
+                                <td>
+                                    <%= item.monthly%>
+                                </td>
+                                <td>
+                                    <%= money.currencyFormatter.format(item.expense)%>
+                                </td>
+                                <td>
+                                    <%= money.currencyFormatter.format(item.revenue)%>
+                                </td>
+                                <td>
+                                    <%= money.currencyFormatter.format(item.revenue - item.expense)%>
+                                </td>
+                            </tr>
+                            <% }) %>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th>Total</th>
+                            <th>
+                                <%=money.currencyFormatter.format(purchases.totalpurchases)%>
+                            </th>
+                            <th>
+                                <%=money.currencyFormatter.format(sales.totalsales)%>
+                            </th>
+                            <th>
+                                <%=money.currencyFormatter.format(sales.totalsales - purchases.totalpurchases)%>
+                            </th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+        </div>
+
+
     </div>
 
     <script>
-        
-        $(document).ready( () => {
-            read()
+
+        $(document).ready(() => {
+            $('#form-search-date').submit(function (event) {
+                event.preventDefault()
+                readDoughnat()
+                readLine()
+            })
+
+            readDoughnat()
+            readLine()
+            $('#table-dashboard').DataTable()
         })
-        const read = () => {
-            $.get('/dashboard/pie').done(function (data) {
-                var chartDoughnat = $('#myPieChart');
-                var myPieChart = new Chart(chartDoughnat, {
+
+
+        const readDoughnat = () => {
+            const startdate = $('#startdate').val()
+            const enddate = $('#enddate').val()
+            $.get('/dashboard/doughnat', { startdate, enddate }).done(function ({ direct, member }) {
+                const chartDoughnat = $('#myDoughnatChart');
+                new Chart(chartDoughnat, {
                     type: 'doughnut',
                     data: {
                         labels: ["Direct", "Customer"],
                         datasets: [{
-                            data: [data.direct, data.member],
+                            data: [direct, member],
                             backgroundColor: ['#4e73df', '#1cc88a'],
                             hoverBackgroundColor: ['#2e59d9', '#17a673', '#2c9faf'],
                             hoverBorderColor: "rgba(234, 236, 244, 1)",
@@ -183,13 +253,105 @@
                             caretPadding: 10,
                         },
                         legend: {
-                            display: top
+                            display: "bottom",
+                            position: "bottom"
                         },
                         cutoutPercentage: 80,
                     },
                 });
             })
         }
+
+
+
+        const readLine = () => {
+            const startdate = $('#startdate').val()
+            const enddate = $('#enddate').val()
+            $.get('/dashboard/line', { startdate, enddate }).done(function ({ eachMonth, incomePerMonth }) {
+                const line = $('#myLineChart');
+                new Chart(line, {
+                    type: 'line',
+                    data: {
+                        labels: eachMonth,
+                        datasets: [{
+                            label: "Earnings",
+                            lineTension: 0.3,
+                            backgroundColor: "rgba(78, 115, 223, 0.05)",
+                            borderColor: "rgba(78, 115, 223, 1)",
+                            pointRadius: 3,
+                            pointBackgroundColor: "rgba(78, 115, 223, 1)",
+                            pointBorderColor: "rgba(78, 115, 223, 1)",
+                            pointHoverRadius: 3,
+                            pointHoverBackgroundColor: "rgba(78, 115, 223, 1)",
+                            pointHoverBorderColor: "rgba(78, 115, 223, 1)",
+                            pointHitRadius: 10,
+                            pointBorderWidth: 2,
+                            data: incomePerMonth,
+                        }],
+                    },
+                    options: {
+                        maintainAspectRatio: false,
+                        layout: {
+                            padding: {
+                                left: 10,
+                                right: 25,
+                                top: 25,
+                                bottom: 0
+                            }
+                        },
+                        scales: {
+                            xAxes: [{
+                                time: {
+                                    unit: 'date'
+                                },
+                                gridLines: {
+                                    display: false,
+                                    drawBorder: false
+                                },
+                                ticks: {
+                                    maxTicksLimit: 7
+                                }
+                            }],
+                            yAxes: [{
+                                ticks: {
+                                    maxTicksLimit: 5,
+                                    padding: 10,
+                                },
+                                gridLines: {
+                                    color: "rgb(234, 236, 244)",
+                                    zeroLineColor: "rgb(234, 236, 244)",
+                                    drawBorder: false,
+                                    borderDash: [2],
+                                    zeroLineBorderDash: [2]
+                                }
+                            }],
+                        },
+                        legend: {
+                            display: false
+                        },
+                        tooltips: {
+                            backgroundColor: "rgb(255,255,255)",
+                            bodyFontColor: "#858796",
+                            titleMarginBottom: 10,
+                            titleFontColor: '#6e707e',
+                            titleFontSize: 14,
+                            borderColor: '#dddfeb',
+                            borderWidth: 1,
+                            xPadding: 15,
+                            yPadding: 15,
+                            displayColors: false,
+                            intersect: false,
+                            mode: 'index',
+                            caretPadding: 10
+                        }
+                    }
+                });
+            })
+        }
+       
+
+        
+
     </script>
 
     <%- include('../partials/footer')%>
