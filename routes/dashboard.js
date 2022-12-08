@@ -59,22 +59,18 @@ module.exports = function (db) {
       if (startdate && enddate) {
         const { rows: direct } = await db.query('SELECT count(*) AS totaldirect FROM sales WHERE customer = 2 AND time BETWEEN $1 AND $2', [startdate, enddate])
         const { rows: member } = await db.query('SELECT count(*) AS totalmember FROM sales WHERE customer != 2 AND time BETWEEN $1 AND $2', [startdate, enddate])
-        console.log(direct, member, "ini 1");
         res.json({ direct: direct[0].totaldirect, member: member[0].totalmember })
       } else if (startdate) {
         const { rows: direct } = await db.query('SELECT count(*) AS totaldirect FROM sales WHERE customer = 2 AND time >= $1 ', [startdate])
         const { rows: member } = await db.query('SELECT count(*) AS totalmember FROM sales WHERE customer != 2 AND time >= $1 ', [startdate])
-        console.log(direct, member, "ini 2");
         res.json({ direct: direct[0].totaldirect, member: member[0].totalmember })
       } else if (enddate) {
         const { rows: direct } = await db.query('SELECT count(*) AS totaldirect FROM sales WHERE customer = 2 AND time <= $1 ', [enddate])
         const { rows: member } = await db.query('SELECT count(*) AS totalmember FROM sales WHERE customer != 2 AND time <= $1 ', [enddate])
-        console.log(direct, member, "ini 3");
         res.json({ direct: direct[0].totaldirect, member: member[0].totalmember })
       } else {
         const { rows: direct } = await db.query('SELECT count(*) AS totaldirect FROM sales WHERE customer = 2')
         const { rows: member } = await db.query('SELECT count(*) AS totalmember FROM sales WHERE customer != 2')
-        console.log(direct, member, "ini 4");
         res.json({ direct: direct[0].totaldirect, member: member[0].totalmember })
       }
     } catch (error) {
@@ -109,7 +105,7 @@ module.exports = function (db) {
         for (const labaRugi in newData) {
           incomePerMonth.push(newData[labaRugi].revenue - newData[labaRugi].expense)
         }
-        console.log(eachMonth, incomePerMonth);
+        
         res.json({ eachMonth, incomePerMonth })
       } else if (startdate) {
         const { rows: getPurchases } = await db.query("SELECT to_char(time, 'Mon YY') AS monthly, to_char(time, 'YY-MM') AS sortmonth, sum(totalsum) AS totalpurchases FROM purchases WHERE time >= $1  GROUP BY monthly, sortmonth ORDER BY sortmonth", [startdate])
@@ -131,7 +127,7 @@ module.exports = function (db) {
         for (const labaRugi in newData) {
           incomePerMonth.push(newData[labaRugi].revenue - newData[labaRugi].expense)
         }
-        console.log(eachMonth, incomePerMonth);
+        
         res.json({ eachMonth, incomePerMonth })
       } else if (enddate) {
         const { rows: getPurchases } = await db.query("SELECT to_char(time, 'Mon YY') AS monthly, to_char(time, 'YY-MM') AS sortmonth, sum(totalsum) AS totalpurchases FROM purchases WHERE time <= $1  GROUP BY monthly, sortmonth ORDER BY sortmonth", [enddate])
@@ -153,7 +149,6 @@ module.exports = function (db) {
         for (const labaRugi in newData) {
           incomePerMonth.push(newData[labaRugi].revenue - newData[labaRugi].expense)
         }
-        console.log(eachMonth, incomePerMonth);
         res.json({ eachMonth, incomePerMonth })
       } else {
         const { rows: getPurchases } = await db.query("SELECT to_char(time, 'Mon YY') AS monthly, to_char(time, 'YY-MM') AS sortmonth, sum(totalsum) AS totalpurchases FROM purchases GROUP BY monthly, sortmonth ORDER BY sortmonth")
@@ -175,7 +170,7 @@ module.exports = function (db) {
         for (const labaRugi in newData) {
           incomePerMonth.push(newData[labaRugi].revenue - newData[labaRugi].expense)
         }
-        console.log(eachMonth, incomePerMonth);
+        
         res.json({ eachMonth, incomePerMonth })
       }
 

@@ -27,7 +27,8 @@ module.exports = function (db) {
         return res.redirect('/')
       }
 
-      req.session.user = { email: findReg.rows[0].email, nickname: findReg.rows[0].name, role: findReg.rows[0].role }
+      req.session.user = {id: findReg.rows[0].userid, email: findReg.rows[0].email, nickname: findReg.rows[0].name, role: findReg.rows[0].role }
+   
       res.redirect('/home')
     } catch (error) {
       console.log("gagal", error);

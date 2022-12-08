@@ -1,0 +1,41 @@
+<%- include('../partials/header')%>
+<title><%= currentPage %></title>
+    <div class="container">
+        <%- include('../partials/alert')%>
+        <h1 class="h2 mb-0 text-gray-800">Profile</h1>
+        <br>
+        <div class="card">
+            <div class="card-header">
+                <div class="header">
+                    <div class="text-xl font-weight-bold text-primary text-pascalcase case mb-1">
+                        Your Profile</div>
+                </div>
+            </div>
+            <div class="card-body">
+
+                <form action="" method="post">
+
+                    <div class="row mb-3">
+                        <label for="email" class="col-sm-2 col-form-label">Email</label>
+                        <div class="col-sm-10">
+                            <input type="email" class="form-control" id="email" name="email" value="<%= user.email%>" required>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <label for="name" class="col-sm-2 col-form-label">Name</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="name" name="name" value="<%= user.nickname%>" required>
+                        </div>
+                    </div>
+
+                </div>
+                    
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-success"> <i class="fas fa-solid fa-database"></i> Update</button>
+                    </div>
+                </form>
+
+        </div>
+    </div>
+    <%- include('../partials/footer')%>
