@@ -181,5 +181,5 @@ module.exports = function (db) {
 
   });
 
-  return router
+  return router 
 } 
