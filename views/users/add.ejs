@@ -1,5 +1,7 @@
 <%- include('../partials/header')%>
-<title><%= currentPage %></title>
+    <title>
+        <%= currentPage %>
+    </title>
     <div class="container">
         <strong>
             <h2>Users</h2>
@@ -56,8 +58,18 @@
                         </div>
                     </fieldset>
                     <div class="card-footer">
-                        <button type="submit" class="btn btn-success"> <i class="fas fa-solid fa-database"></i> Save</button>
-                        <a href="/users" class="btn btn-warning"> <i class=" fa fa-solid fa-undo"></i> Back </a>
+                        <button type="submit" class="btn btn-success btn-icon-split">
+                            <span class="icon text-white-50">
+                                <i class="fas fa-solid fa-database"></i>
+                            </span>
+                            <span class="text">Save</span>
+                        </button>
+                        <a href="/users" class="btn btn-warning btn-icon-split">
+                            <span class="icon text-white-50">
+                                <i class="fa fa-solid fa-undo"></i>
+                            </span>
+                            <span class="text">Back</span>
+                        </a>
                     </div>
                 </form>
             </div>

@@ -1,5 +1,7 @@
 <%- include('../partials/header')%>
-<title><%= currentPage %></title>
+    <title>
+        <%= currentPage %>
+    </title>
     <div class="container">
         <strong>
             <h2>Units</h2>
@@ -34,13 +36,23 @@
                             <textarea class="form-control" id="note" name="note" rows="2"></textarea>
                         </div>
                     </div>
-                </div>
-                    <div class="card-footer">
-                        <button type="submit" class="btn btn-success"> <i class="fas fa-solid fa-database"></i>
-                            Save</button>
-                        <a href="/units" class="btn btn-warning"> <i class=" fa fa-solid fa-undo"></i> Back </a>
-                    </div>
-                </form>
+            </div>
+            <div class="card-footer">
+                <button type="submit" class="btn btn-success btn-icon-split">
+                    <span class="icon text-white-50">
+                        <i class="fas fa-solid fa-database"></i>
+                    </span>
+                    <span class="text">Save</span>
+                </button>
+
+                <a href="/units" class="btn btn-warning btn-icon-split">
+                    <span class="icon text-white-50">
+                        <i class="fa fa-solid fa-undo"></i>
+                    </span>
+                    <span class="text">Back</span>
+                </a>
+            </div>
+            </form>
         </div>
     </div>
     <%- include('../partials/footer')%>
