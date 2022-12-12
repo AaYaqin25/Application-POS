@@ -2,18 +2,18 @@ var express = require('express');
 var router = express.Router();
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
-const { isLoggedIn } = require('../helpers/middle.js');
+const { isAdmin, isLoggedIn } = require('../helpers/middle.js');
 
 module.exports = function (db) {
 
-  router.get('/', isLoggedIn, function (req, res, next) {
+  router.get('/', isAdmin, function (req, res, next) {
     res.render('users/isi', {
       user: req.session.user,
       currentPage: "POS - Users"
     })
   });
 
-  router.get('/datatable', isLoggedIn, async (req, res) => {
+  router.get('/datatable', isAdmin, async (req, res) => {
     let params = []
 
     if (req.query.search.value) {
@@ -40,7 +40,7 @@ module.exports = function (db) {
     res.json(response)
   })
 
-  router.get('/add', isLoggedIn, function (req, res, next) {
+  router.get('/add', isAdmin, function (req, res, next) {
     res.render('users/add', {
       user: req.session.user,
       currentPage: "POS - Users"
@@ -48,7 +48,7 @@ module.exports = function (db) {
   });
 
 
-  router.post('/add', isLoggedIn, async function (req, res, next) {
+  router.post('/add', isAdmin, async function (req, res, next) {
     try {
       const { email, name, password, role } = req.body
       const hash = bcrypt.hashSync(password, saltRounds);
@@ -60,7 +60,7 @@ module.exports = function (db) {
     }
   });
 
-  router.get('/edit/:userid', isLoggedIn, async function (req, res, next) {
+  router.get('/edit/:userid', isAdmin, async function (req, res, next) {
     try {
       const id = req.params.userid
       const getEdit = await db.query("SELECT * FROM users WHERE userid = $1", [id])
@@ -75,7 +75,7 @@ module.exports = function (db) {
     }
   });
 
-  router.post('/edit/:userid', isLoggedIn, async function (req, res, next) {
+  router.post('/edit/:userid', isAdmin, async function (req, res, next) {
     try {
       const id = req.params.userid
       const { email, name, role } = req.body
@@ -88,7 +88,7 @@ module.exports = function (db) {
   });
 
 
-  router.get('/delete/:userid', isLoggedIn, async function (req, res, next) {
+  router.get('/delete/:userid', isAdmin, async function (req, res, next) {
     try {
       const id = req.params.userid
       await db.query("DELETE FROM users WHERE userid = $1", [id])

@@ -44,7 +44,10 @@
             </div>
         </div>
     </div>
+
     <script>
+        let userLogin = "<%= user.id%>"
+
         $(document).ready(function () {
             $('#table-purchases').DataTable({
                 "lengthMenu": [[3, 10, 100], [3, 10, 100]],
@@ -97,9 +100,21 @@
                         }
                     }
 
-                ]
+                ],
+                "rowCallback": function (row, data, index) {
+                    if (data.operator != userLogin) {
+                        $('td:eq(4)', row).css({
+                            "pointer-events": 'none',
+                            "cursor": 'default',
+                            "color": 'white',
+                            "background-color": 'black'
+                        })
+                    }
+                }
             });
         });
+
+
     </script>
 
 

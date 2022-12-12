@@ -1,11 +1,11 @@
 const e = require('connect-flash');
 var express = require('express');
 var router = express.Router();
-const { isLoggedIn } = require('../helpers/middle.js')
+const { isAdmin } = require('../helpers/middle.js')
 var { money } = require('../public/javascripts/util.js')
 
 module.exports = function (db) {
-  router.get('/', isLoggedIn, async function (req, res, next) {
+  router.get('/', isAdmin, async function (req, res, next) {
     try {
       const { rows: purchases } = await db.query('SELECT sum(totalsum) AS totalpurchases FROM purchases')
       const { rows: sales } = await db.query('SELECT sum(totalsum) AS totalsales FROM sales')
@@ -52,7 +52,7 @@ module.exports = function (db) {
   });
 
 
-  router.get('/doughnat', isLoggedIn, async function (req, res, next) {
+  router.get('/doughnat', isAdmin, async function (req, res, next) {
     try {
       const { startdate, enddate } = req.query
 
@@ -81,7 +81,7 @@ module.exports = function (db) {
   });
 
 
-  router.get('/line', isLoggedIn, async function (req, res, next) {
+  router.get('/line', isAdmin, async function (req, res, next) {
     try {
       const { startdate, enddate } = req.query
 

@@ -2,11 +2,11 @@ var express = require('express');
 var router = express.Router();
 var path = require('path')
 var fs = require('fs')
-const { isLoggedIn } = require('../helpers/middle.js');
+const { isAdmin } = require('../helpers/middle.js');
 
 module.exports = function (db) {
 
-    router.get('/', isLoggedIn, function (req, res, next) {
+    router.get('/', isAdmin, function (req, res, next) {
         res.render('goods/isi', {
             user: req.session.user,
             currentPage: "POS - Goods",
@@ -14,7 +14,7 @@ module.exports = function (db) {
     });
 
 
-    router.get('/datatable', isLoggedIn, async (req, res) => {
+    router.get('/datatable', isAdmin, async (req, res) => {
         let params = []
 
         if (req.query.search.value) {
@@ -44,7 +44,7 @@ module.exports = function (db) {
     })
 
 
-    router.get('/add', isLoggedIn, async function (req, res, next) {
+    router.get('/add', isAdmin, async function (req, res, next) {
         const dataUnit = await db.query("SELECT * FROM units")
         res.render('goods/add', {
             user: req.session.user,
@@ -54,7 +54,7 @@ module.exports = function (db) {
     });
 
 
-    router.post('/add', isLoggedIn, async function (req, res, next) {
+    router.post('/add', isAdmin, async function (req, res, next) {
         try {
             const { barcode, name, stock, purchaseprice, sellingprice, unit } = req.body
 
@@ -84,7 +84,7 @@ module.exports = function (db) {
     });
 
 
-    router.get('/edit/:barcode', isLoggedIn, async function (req, res, next) {
+    router.get('/edit/:barcode', isAdmin, async function (req, res, next) {
         try {
             const id = req.params.barcode
             const getEdit = await db.query("SELECT * FROM goods WHERE barcode = $1", [id])
@@ -102,7 +102,7 @@ module.exports = function (db) {
     });
 
 
-    router.post('/edit/:barcode', isLoggedIn, async function (req, res, next) {
+    router.post('/edit/:barcode', isAdmin, async function (req, res, next) {
         try {
             const id = req.params.barcode
             const { name, stock, purchaseprice, sellingprice, unit } = req.body
@@ -130,7 +130,7 @@ module.exports = function (db) {
         }
     });
 
-    router.get('/delete/:barcode', isLoggedIn, async function (req, res, next) {
+    router.get('/delete/:barcode', isAdmin, async function (req, res, next) {
         try {
           const id = req.params.barcode
 

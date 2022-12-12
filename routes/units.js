@@ -1,16 +1,16 @@
 var express = require('express');
 var router = express.Router();
-const { isLoggedIn } = require('../helpers/middle.js')
+const { isAdmin } = require('../helpers/middle.js')
 
 module.exports = function (db) {
-    router.get('/', isLoggedIn, function (req, res, next) {
+    router.get('/', isAdmin, function (req, res, next) {
         res.render('units/isi', { 
           user: req.session.user,
           currentPage: "POS - Units"
         })
     });
 
-    router.get('/datatable', isLoggedIn, async (req, res) => {
+    router.get('/datatable', isAdmin, async (req, res) => {
         let params = []
 
         if (req.query.search.value) {
@@ -42,7 +42,7 @@ module.exports = function (db) {
     })
 
 
-    router.get('/add', isLoggedIn, function (req, res, next) {
+    router.get('/add', isAdmin, function (req, res, next) {
         res.render('units/add', { 
           user: req.session.user,
           currentPage: "POS - Units"
@@ -50,7 +50,7 @@ module.exports = function (db) {
       });
 
 
-      router.post('/add', isLoggedIn,async function (req, res, next) {
+      router.post('/add', isAdmin,async function (req, res, next) {
         try {
           const { unit, name, note } = req.body
           await db.query("INSERT INTO units(unit, name, note) VALUES ($1, $2, $3)", [unit, name, note])
@@ -61,7 +61,7 @@ module.exports = function (db) {
         }
       });
 
-      router.get('/edit/:unit', isLoggedIn, async function (req, res, next) {
+      router.get('/edit/:unit', isAdmin, async function (req, res, next) {
         try {
           const id = req.params.unit
           const getEdit = await db.query("SELECT * FROM units WHERE unit = $1", [id])
@@ -77,7 +77,7 @@ module.exports = function (db) {
       });
 
 
-      router.post('/edit/:unit', isLoggedIn,async function (req, res, next) {
+      router.post('/edit/:unit', isAdmin,async function (req, res, next) {
         try {
           const id = req.params.unit
           const { unit, name, note } = req.body
@@ -90,7 +90,7 @@ module.exports = function (db) {
       });
 
 
-      router.get('/delete/:unit', isLoggedIn, async function (req, res, next) {
+      router.get('/delete/:unit', isAdmin, async function (req, res, next) {
         try {
           const id = req.params.unit
           await db.query("DELETE FROM units WHERE unit = $1", [id])

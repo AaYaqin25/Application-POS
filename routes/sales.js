@@ -81,7 +81,7 @@ module.exports = function (db) {
         try {
             const { invoice } = req.params
             const { totalsummary, customername, pay, change } = req.body
-            const { userid } = req.session.user
+            const userid = req.session.user.id
 
             if (customername) {
                 await db.query('UPDATE sales SET totalsum = $1, customer = $2, operator = $3, pay = $4, change = $5 WHERE invoice = $6', [totalsummary, customername, userid,  pay, change, invoice])
