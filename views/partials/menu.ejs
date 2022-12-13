@@ -16,7 +16,7 @@
         <hr class="sidebar-divider my-0">
         <% if (user.role == 'Admin') {%>
         <!-- Nav Item - Dashboard -->
-        <li class="nav-item active">
+        <li class="nav-item <%= currentPage == 'POS - Dashboard' ? 'active' : '' %>">
             <a class="nav-link" href="/dashboard">
                 <i class="fas fa-fw fa-tachometer-alt"></i>
                 <span>Dashboard</span>
@@ -38,31 +38,31 @@
                 <i class="fas fa-fw fa-wrench"></i>
                 <span>Goods Utilities</span>
             </a>
-            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div id="collapseTwo" class="collapse <%= currentPage == 'POS - Goods' || currentPage == 'POS - Units' ? 'show' : '' %>" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">GOODS UTILITIES:</h6>
-                    <a class="collapse-item" href="/goods">Goods</a>
-                    <a class="collapse-item" href="/units">Units</a>
+                    <a class="collapse-item <%= currentPage == 'POS - Goods' ? 'active' : '' %>" href="/goods">Goods</a>
+                    <a class="collapse-item <%= currentPage == 'POS - Units' ? 'active' : '' %>" href="/units">Units</a>
                 </div>
             </div>
         </li>
         <%}%>
         <!-- Nav Item - Utilities Collapse Menu -->
-        <li class="nav-item active">
+        <li class="nav-item <%= currentPage == 'POS - Suppliers' ? 'active' : '' %>"">
             <a class="nav-link" href="/suppliers">
                 <i class="fas fa-fw fa-link"></i>
                 <span>Suppliers</span>
             </a>
         </li>
 
-        <li class="nav-item active">
+        <li class="nav-item <%= currentPage == 'POS - Customers' ? 'active' : '' %>"">
             <a class="nav-link" href="/customers">
                 <i class="fas fa-fw fa-users"></i>
                 <span>Customers</span>
             </a>
         </li>
         <% if (user.role == 'Admin') {%>
-        <li class="nav-item active">
+        <li class="nav-item <%= currentPage == 'POS - Users' ? 'active' : '' %>"">
             <a class="nav-link" href="/users">
                 <i class="fas fa-fw fa-user"></i>
                 <span>Users</span>
@@ -81,13 +81,13 @@
 
       
         <!-- Nav Item - Tables -->
-        <li class="nav-item">
+        <li class="nav-item <%= currentPage == 'POS - Purchases' ? 'active' : '' %>"">
             <a class="nav-link" href="/purchases">
                 <i class="fas fa-fw fa-table"></i>
                 <span>Purchases</span></a>
         </li>
           <!-- Nav Item - Charts -->
-        <li class="nav-item">
+        <li class="nav-item <%= currentPage == 'POS - Sales' ? 'active' : '' %>"">
             <a class="nav-link" href="/sales">
                 <i class="fas fa-fw fa-chart-area"></i>
                 <span>Sales</span></a>
