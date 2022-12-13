@@ -1,3 +1,48 @@
+<script>
+    $(document).ready(function () {
+        readGoods()
+        countGoods()
+    })
+
+    const readGoods = () => {
+        $.get('/notif/getitem').done(function ({ getGoods }) {
+            let alert = ''
+            getGoods.forEach(item => {
+                alert += `
+                <a class="dropdown-item d-flex align-items-center" href="/purchases/create">
+
+                <div class="mr-3">
+                     <div class="icon-circle bg-warning">
+                            <i class="fas fa-exclamation-triangle text-white"></i>
+                     </div>
+                </div>
+
+                <div class="medium text-gray-1000">
+                    Barcode: ${item.barcode} <br> Stock Alert: ${item.name} <br> only have stock ${item.stock}. 
+                </div>
+                
+                </a>
+                `
+            });
+            $('#notifalert').html(alert)
+        })
+
+    }
+
+
+    const countGoods = () => {
+        $.get('/notif/countitem').done(function ({ getCount }) {
+            let count = ''
+            getCount.forEach(item => {
+               count += `
+               <span class="badge badge-danger badge-counter">${item.totalalert == 0 ?  '' : item.totalalert.concat('+')}  </span>
+               `
+            });
+            $('#countnotif').html(count)
+        })
+    }
+</script>
+
 </body>
 
 </html>
