@@ -32,7 +32,7 @@
         </div>
         <% if (user.role == 'Admin') {%>
         <!-- Nav Item - Pages Collapse Menu -->
-        <li class="nav-item">
+        <li class="nav-item  <%= currentPage == 'POS - Goods' || currentPage == 'POS - Units' ? 'active' : '' %>">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
                 aria-expanded="true" aria-controls="collapseTwo">
                 <i class="fas fa-fw fa-wrench"></i>
